@@ -55,3 +55,32 @@ export const signup = async (req, res) => {
     res.status(500).json({ message: "Something went wrong" });
   }
 };
+export const update = async (req,res) => {
+  const user = await ModelSchemaOfUser.findById(user.ModelSchemaOfUser.id)
+
+
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    if (req.body.password) {
+      user.password = req.body.password;
+    }
+
+    const updateUser = await user.save();
+
+    res.json(
+      {
+        name : updateUser.name,
+        email : updateUser.email,
+        id : updateUser.id,
+
+      }
+    );
+  }
+
+  else  {
+
+  }
+  res.status(404);
+  throw new Error("User Not Found");
+}
