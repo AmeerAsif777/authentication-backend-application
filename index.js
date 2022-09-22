@@ -17,11 +17,11 @@ app.use("/user", userRouter);
 
 // will create mongodb
 const CONNECTION_URL =
-  "mongodb+srv://XYZ";
+  "mongodb+srv://Ameer:AMEER@main.ejkuwry.mongodb.net/?retryWrites=true&w=majority";
 const PORT = process.env.PORT || 80;
 
 mongoose
-  .connect(process.env.CONNECTION_URL || CONNECTION_URL, {
+  .connect(CONNECTION_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
