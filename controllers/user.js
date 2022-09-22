@@ -39,7 +39,6 @@ export const signup = async (req, res) => {
 
     // if not, then creating password with decrypting
     const hashedPassword = await bcrypt.hash(password, 12);
-
     const result = await ModelSchemaOfUser.create({
       email,
       password: hashedPassword,
@@ -47,6 +46,7 @@ export const signup = async (req, res) => {
     });
 
     const token = jwt.sign({ email: result.email, id: result._id }, secret, {
+    
       expiresIn: "24h",
     });
 
@@ -56,14 +56,17 @@ export const signup = async (req, res) => {
   }
 };
 export const update = async (req,res) => {
-  const user = await ModelSchemaOfUser.findById(user.ModelSchemaOfUser.id)
+  const user = await ModelSchemaOfUser.findOne({email:req.body.email})
 
 
   if (user) {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
     if (req.body.password) {
-      user.password = req.body.password;
+       user.password = await bcrypt.hash(req.body.password,12);
+    }
+    if (req.body.profile_pic){
+      user.profile_pic = req.body.profile_pic;
     }
 
     const updateUser = await user.save();
@@ -72,15 +75,16 @@ export const update = async (req,res) => {
       {
         name : updateUser.name,
         email : updateUser.email,
-        id : updateUser.id,
+        password : updateUser.password,
+        profile_pic : updateUser.profile_pic,
+        //id : updateUser.id,
 
       }
     );
   }
 
   else  {
-
+    res.status(500).json({ message: "User not found"});
   }
-  res.status(404);
-  throw new Error("User Not Found");
+  
 }
