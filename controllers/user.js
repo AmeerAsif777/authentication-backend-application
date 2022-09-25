@@ -2,8 +2,9 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 import ModelSchemaOfUser from "../models/user.js";
-
 const secret = "test";
+
+import upload from "../middleware/multer.js";
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
@@ -76,7 +77,7 @@ export const update = async (req,res) => {
         name : updateUser.name,
         email : updateUser.email,
         password : updateUser.password,
-        profile_pic : updateUser.profile_pic,
+        //profile_pic : updateUser.profile_pic,
         //id : updateUser.id,
 
       }
@@ -86,5 +87,9 @@ export const update = async (req,res) => {
   else  {
     res.status(500).json({ message: "User not found"});
   }
-  
 }
+
+
+
+
+
