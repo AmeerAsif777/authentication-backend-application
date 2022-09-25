@@ -2,8 +2,9 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 import ModelSchemaOfUser from "../models/user.js";
-
 const secret = "test";
+
+
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
@@ -39,7 +40,6 @@ export const signup = async (req, res) => {
 
     // if not, then creating password with decrypting
     const hashedPassword = await bcrypt.hash(password, 12);
-
     const result = await ModelSchemaOfUser.create({
       email,
       password: hashedPassword,
@@ -47,6 +47,7 @@ export const signup = async (req, res) => {
     });
 
     const token = jwt.sign({ email: result.email, id: result._id }, secret, {
+    
       expiresIn: "24h",
     });
 
@@ -55,3 +56,40 @@ export const signup = async (req, res) => {
     res.status(500).json({ message: "Something went wrong" });
   }
 };
+export const update = async (req,res) => {
+  const user = await ModelSchemaOfUser.findOne({email:req.body.email})
+
+
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    if (req.body.password) {
+       user.password = await bcrypt.hash(req.body.password,12);
+    }
+    if (req.body.profile_pic){
+      user.profile_pic = req.body.profile_pic;
+    }
+
+    const updateUser = await user.save();
+
+    res.json(
+      {
+        name : updateUser.name,
+        email : updateUser.email,
+        password : updateUser.password,
+        //profile_pic : updateUser.profile_pic,
+        //id : updateUser.id,
+
+      }
+    );
+  }
+
+  else  {
+    res.status(500).json({ message: "User not found"});
+  }
+}
+
+
+
+
+
