@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import ModelSchemaOfUser from "../models/user.js";
 const secret = "test";
 
-import upload from "../middleware/multer.js";
+
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
