@@ -73,13 +73,7 @@ export const update = async (req,res) => {
     const updateUser = await user.save();
 
     res.json(
-      {
-        name : updateUser.name,
-        email : updateUser.email,
-        password : updateUser.password,
-        //profile_pic : updateUser.profile_pic,
-        //id : updateUser.id,
-
+      {message:"Updated successfully",updateUser
       }
     );
   }
@@ -87,6 +81,22 @@ export const update = async (req,res) => {
   else  {
     res.status(500).json({ message: "User not found"});
   }
+}
+
+export const viewProfile = async(req,res)=>{
+  try{
+  
+  const profile=await ModelSchemaOfUser.findOne({email:req.body.email});
+  
+  if(profile){
+    res.json(profile);
+  }
+
+  }
+  catch(error){
+    res.status(300).json({message:"something went wrong"});
+  }
+
 }
 
 
